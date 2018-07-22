@@ -5,3 +5,4 @@ public_subnets  = ["10.1.1.0/24"]
 azs             = ["us-east-1a"]
 enable_nat_gateway="true"
 environment ="dev"
+owner = "devopsTeam"

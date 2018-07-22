@@ -1,4 +1,3 @@
-
 variable "name" {
   description = "The name of the VPC"
 }
@@ -13,8 +12,7 @@ variable "terraform" {
 }
 
 variable "owner" {
-  description = "The name of the VPC owner"
-  value = "devopsTeam"
+  description = "The name of the VPC owner"  
 }
 
 variable "cidr" {

@@ -6,6 +6,7 @@ module "vpc" {
  private_subnets    ="${var.private_subnets}"
  azs                ="${var.azs}"
  enable_nat_gateway ="${var.enable_nat_gateway}"
+ owner              ="${var.owner}"
  tags {
     "Terraform" = "true"
     "Environment" = "${var.environment}"
