@@ -1,3 +1,21 @@
+data "terraform_remote_state" "vpc" {
+  backend = "s3"
+  config {
+    bucket = "myco-terraform-state"
+    key    = "vpc/us-east-1.tfstate"
+    region = "us-east-1"
+  }
+}
+
+
+data "terraform_remote_state" "eks-cluster" {
+  backend = "s3"
+  config {
+    bucket = "myco-terraform-state"
+    key    = "eks-cluster/us-east-1.tfstate"
+    region = "us-east-1"
+  }
+}
 module "eks-cluster" {
  source                 = "git::https://github.com/shridharMe/terraform-modules.git//modules/eks-worker-node?ref=master"
  vpc_id                 = "${data.terraform_remote_state.vpc.vpc_id}"
