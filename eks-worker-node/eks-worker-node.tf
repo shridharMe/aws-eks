@@ -12,3 +12,7 @@ module "eks-cluster" {
  min-size               = "${var.min-size}"
 }
 
+
+output "node-security-id" {
+  value = "${module.eks-cluster.node-security-id}"
+}

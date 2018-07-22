@@ -12,3 +12,27 @@ module "eks-cluster" {
 }
 
 
+
+output "cluster-endpoint" {
+  value = "${module.eks-cluster.cluster-endpoint}"
+}
+output "cluster-security-id" {
+  value = "${module.eks-cluster.cluster-security-id}"
+}
+
+output "cluster-name" {
+  value = "${module.eks-cluster.cluster-name}"
+}
+
+output "cluster-certificate-data" {
+  value = "${module.eks-cluster.cluster-certificate-data}"
+}
+
+output "cluster-arn" {
+  value = "${module.eks-cluster.cluster-arn}"
+}
+
+
+output "workstation-external-cidr" {
+  value = "${module.workstation-external.workstation-external-cidr}"
+}
