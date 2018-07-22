@@ -91,8 +91,12 @@ pipeline {
                 expression { params.TERRAFORM_ACTION == "provision" }                         
             }
             steps {
-                 sh  '''                                            
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r output -m eks-cluster
+                 sh  ''' 
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init -m eks-kube-config
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan -m  eks-kube-config
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply -m  eks-kube-config   
+                                                              
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r output -m  eks-kube-config
                         
                      '''
             }

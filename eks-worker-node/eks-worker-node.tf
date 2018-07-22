@@ -16,7 +16,7 @@ data "terraform_remote_state" "eks-cluster" {
     region = "us-east-1"
   }
 }
-module "eks-cluster" {
+module "eks-worker-node" {
  source                 = "git::https://github.com/shridharMe/terraform-modules.git//modules/eks-worker-node?ref=master"
  vpc_id                 = "${data.terraform_remote_state.vpc.vpc_id}"
  public_subnet          = "${data.terraform_remote_state.vpc.public_subnets}"
@@ -32,5 +32,8 @@ module "eks-cluster" {
 
 
 output "node-security-id" {
-  value = "${module.eks-cluster.node-security-id}"
+  value = "${module.eks-worker-node.node-security-id}"
+}
+output "node-role-arn" {
+  value = "${module.eks-worker-node.node-role-arn}"
 }
