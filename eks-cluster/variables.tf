@@ -15,9 +15,7 @@ variable "private_subnet" {
 variable "cluster-name" {
     description = "cluster name"
 }
-variable "node-security-id" {
-    description = "node security"
-}
+
 variable "workstation-external-cidr"{ 
     description = "workstation external cidr"
 }
