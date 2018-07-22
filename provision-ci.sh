@@ -43,5 +43,5 @@ else
     else
        TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}"
     fi
-    
+    cd $WORKSPACE
 fi
