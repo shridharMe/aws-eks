@@ -1,5 +1,5 @@
 module "vpc" {
- source             = "git::git@github.com:shridharMe/terraform-modules.git//modules/vpc?ref=master"
+ source             = "git::https://github.com/shridharMe/terraform-modules.git//modules/vpc?ref=master"
  name               ="${var.name}"
  cidr               ="${var.cidr}"
  public_subnets     ="${var.public_subnets}"
