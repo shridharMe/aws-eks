@@ -34,14 +34,14 @@ else
     cd ${modulename}/
     if [ ${runcmd} == "init" ];then
        rm -rf .terraform/
-       yes yes |  TF_WORKSPACE=${envname}-${squadname} terraform ${runcmd}  
+       yes yes |  TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd}  
     
     elif [ ${runcmd} == "destroy" ];then 
-       TF_WORKSPACE=${envname}-${squadname} terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars"  -force
+       TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars"  -force
      elif [ ${runcmd} == "apply" ];then 
-        TF_WORKSPACE=${envname}-${squadname} terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars"  -auto-approve  
+        TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars"  -auto-approve  
     else
-       TF_WORKSPACE=${envname}-${squadname} terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars"
+       TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars"
     fi
     
 fi
