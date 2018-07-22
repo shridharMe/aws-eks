@@ -1,14 +1,3 @@
-variable "vpc_id" {
- description = "vpc id"
-}
-
-variable "private_subnet" {
- description = "private subnet"
-}
-
-variable "public_subnet" {
- description = "public subnet"
-}
 variable "node-instance-type" {
     description = "public subnet"
 }
