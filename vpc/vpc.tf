@@ -5,12 +5,10 @@ module "vpc" {
  public_subnets     ="${var.public_subnets}"
  private_subnets    ="${var.private_subnets}"
  azs                ="${var.azs}"
- enable_nat_gateway ="${var.enable_nat_gateway}"
  owner              ="${var.owner}"
- tags {
-    "Terraform" = "true"
-    "Environment" = "${var.environment}"
-  }
+ environment        ="${var.environment}"
+ terraform        ="${var.terraform}"
+
 }
 
 output "vpc_id" {
