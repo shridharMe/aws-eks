@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-while getopts "r:s:e:" opt; do
+while getopts "r:s:e:m:" opt; do
    case $opt in
     r) runcmd="$OPTARG"
       ;;
@@ -8,15 +8,17 @@ while getopts "r:s:e:" opt; do
       ;;
     e) envname="$OPTARG"
       ;;
+    m) modulename="$OPTARG"
+      ;;
     \?) echo "Invalid option -$OPTARG" >&2
        ;;
   esac
 done
 
-if [ -z ${runcmd} ] || [ -z ${squadname} ] || [ -z ${envname} ] ; then
+if [ -z ${runcmd} ] || [ -z ${squadname} ] || [ -z ${envname} ] || [ -z ${modulename} ] ; then
     printf "\n"
     printf "Please provide squad and env and terraform command \n\n"
-    printf "./provision.sh -s search -e dev -r init- \n"
+    printf "./provision.sh -s devops -e dev -r init -m vpc \n"
     printf "valid squad values is devops \n"
     printf "\n"
 elif [ "${squadname}" != "devops" ]; then
@@ -29,7 +31,7 @@ elif [ "${runcmd}" != "init" ] && [  "${runcmd}" != "plan" ] && [  "${runcmd}" !
     printf "!!! invalid terrafrom command entry !!! \n"
     printf "Valid terrafrom command to run this script is:  init,plan,apply or destroy \n"  
 else
-    
+    cd ${modulename}/
     if [ ${runcmd} == "init" ];then
        rm -rf .terraform/
        yes yes |  TF_WORKSPACE=${envname}-${squadname} terraform ${runcmd}  

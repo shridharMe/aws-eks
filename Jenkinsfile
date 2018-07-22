@@ -28,8 +28,8 @@ pipeline {
             
             steps {            
                     sh ''' 
-                        chmod +x ./provision-ci.sh   
-                        cd prerequisite/                               
+                        chmod +x ./provision-ci.sh  
+                                                      
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply
@@ -60,8 +60,7 @@ pipeline {
             steps {
                  sh  '''
                                              
-                      chmod +x ./provision-ci.sh   
-                        cd eks-cluster/                               
+                                                     
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply
@@ -74,10 +73,7 @@ pipeline {
                 expression { params.REFRESH == false }                           
             }
             steps {
-                 sh  '''
-                                             
-                      chmod +x ./provision-ci.sh   
-                        cd eks-worker-node/                               
+                 sh  '''                                            
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply
