@@ -38,9 +38,9 @@ output "workstation-external-cidr" {
 }
 
 output "kubeconfig" {
-  value = "${module.eks-cluste.kubeconfig}"
+  value = "${module.eks-cluster.kubeconfig}"
 }
 
 output "config-map" {
-  value = "${module.eks-cluste.config-map-aws-auth}"
+  value = "${module.eks-cluster.config-map-aws-auth}"
 }
