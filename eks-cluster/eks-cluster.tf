@@ -36,3 +36,11 @@ output "cluster-arn" {
 output "workstation-external-cidr" {
   value = "${module.workstation-external.workstation-external-cidr}"
 }
+
+output "kubeconfig" {
+  value = "${module.eks-cluste.kubeconfig}"
+}
+
+output "config-map" {
+  value = "${module.eks-cluste.config-map-aws-auth}"
+}
