@@ -20,8 +20,8 @@ data "terraform_remote_state" "eks-cluster" {
 module "eks-worker-node" {
  source                 = "git::https://github.com/shridharMe/terraform-modules.git//modules/eks-worker-node?ref=master"
  vpc_id                 = "${data.terraform_remote_state.vpc.vpc_id}"
- public_subnet          = "${element(data.terraform_remote_state.vpc.public_subnets, 0)}"
- private_subnet         = "${element(data.terraform_remote_state.vpc.private_subnets, 0)}"
+ public_subnets         = "10.1.1.0/24" 
+ private_subnets        ="10.1.4.0/24"
  cluster-name           = "${data.terraform_remote_state.eks-cluster.cluster-name}"
  cluster-endpoint       = "${data.terraform_remote_state.eks-cluster.cluster-endpoint}"
  cluster-security-id    = "${data.terraform_remote_state.eks-cluster.cluster-security-id}"

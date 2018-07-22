@@ -7,7 +7,7 @@ module "vpc" {
  azs                ="${var.azs}"
  owner              ="${var.owner}"
  environment        ="${var.environment}"
- terraform        ="${var.terraform}"
+ terraform          ="${var.terraform}"
 
 }
 

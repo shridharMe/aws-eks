@@ -14,8 +14,8 @@ module "workstation-external" {
 module "eks-cluster" {
  source                     = "git::https://github.com/shridharMe/terraform-modules.git//modules/eks-cluster?ref=master"
  vpc_id                     = "${data.terraform_remote_state.vpc.vpc_id}"
- public_subnets             = "${element(data.terraform_remote_state.vpc.public_subnets, 0)}"
- private_subnets             ="${element(data.terraform_remote_state.vpc.private_subnets, 0)}"
+ public_subnets             = "10.1.1.0/24" 
+ private_subnets             ="10.1.4.0/24"
  cluster-name               = "${var.cluster-name}" 
  workstation-external-cidr  = "${module.workstation-external.workstation-external-cidr}"
 }
