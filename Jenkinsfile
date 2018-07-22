@@ -85,6 +85,19 @@ pipeline {
             }
             
         } 
+        stage('kubeconfig') {
+            when {
+                expression { params.REFRESH == false } 
+                expression { params.TERRAFORM_ACTION == "provision" }                         
+            }
+            steps {
+                 sh  '''                                            
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r output -m eks-cluster
+                        
+                     '''
+            }
+            
+        }
         stage('teardown-complete') {
             when {
                 expression { params.REFRESH == false } 
