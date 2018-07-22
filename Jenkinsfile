@@ -11,6 +11,7 @@ pipeline {
     environment {
         AWS_ACCESS_KEY_ID        = credentials('AWS_ACCESS_KEY')
         AWS_SECRET_ACCESS_KEY    = credentials('AWS_SECRET_KEY') 
+        TERRAFORM_USER_ARN       = credentials('TERRAFORM_USER_ARN') 
         ENV_NAME                 = "dev"   
         SQUAD_NAME               = "devops"       
     }
@@ -30,8 +31,7 @@ pipeline {
             
             steps {            
                     sh ''' 
-                        chmod +x ./provision-ci.sh  
-                                                      
+                        chmod +x ./provision-ci.sh                                                        
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init -m prerequisite
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan -m prerequisite
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply -m prerequisite
