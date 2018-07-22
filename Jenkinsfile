@@ -91,7 +91,8 @@ pipeline {
                 expression { params.TERRAFORM_ACTION == "teardown" }                         
             }
             steps {
-                 sh  '''                                            
+                 sh  '''     
+                        chmod +x ./provision-ci.sh                                               
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m eks-worker-node
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m eks-cluster
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m vpc
