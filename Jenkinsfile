@@ -17,66 +17,86 @@ pipeline {
     parameters {
         booleanParam(name: 'REFRESH',
             defaultValue: true,
-            description: 'Refresh Jenkinsfile and exit.')       
+            description: 'Refresh Jenkinsfile and exit.')  
+         choice(choices: 'provision\nteardown', description: 'Select option to create or teardown infro', name: 'TERRAFORM_ACTION')                          
         
     }
     stages {
         stage('prerequisite') {
             when {
                 expression { params.REFRESH == false }
+                expression { params.TERRAFORM_ACTION == "provision" }
             }
             
             steps {            
                     sh ''' 
                         chmod +x ./provision-ci.sh  
                                                       
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init -m prerequisite
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan -m prerequisite
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply -m prerequisite
                      '''
             }
             
         }
         stage('vpc') {
             when {
-                expression { params.REFRESH == false }                           
+                expression { params.REFRESH == false }  
+                expression { params.TERRAFORM_ACTION == "provision" }                         
             }
             steps {
                  sh  '''
                                              
                       chmod +x ./provision-ci.sh   
                         cd vpc/                               
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init -m vpc
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan -m vpc
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply -m vpc
                      '''
             }
             
         }
         stage('eks-cluster') {
             when {
-                expression { params.REFRESH == false }                           
+                expression { params.REFRESH == false }    
+                expression { params.TERRAFORM_ACTION == "provision" }                       
             }
             steps {
                  sh  '''
                                              
                                                      
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init -m eks-cluster
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan -m eks-cluster
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply -m eks-cluster
                      '''
             }
             
         } 
         stage('eks-worker-node') {
             when {
-                expression { params.REFRESH == false }                           
+                expression { params.REFRESH == false } 
+                expression { params.TERRAFORM_ACTION == "provision" }                         
             }
             steps {
                  sh  '''                                            
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init -m eks-worker-node
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan -m eks-worker-node
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply -m eks-worker-node
+                     '''
+            }
+            
+        } 
+        stage('teardown-complete') {
+            when {
+                expression { params.REFRESH == false } 
+                expression { params.TERRAFORM_ACTION == "teardown" }                         
+            }
+            steps {
+                 sh  '''                                            
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m eks-worker-node
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m eks-cluster
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m vpc
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m prerequisite
                      '''
             }
             
