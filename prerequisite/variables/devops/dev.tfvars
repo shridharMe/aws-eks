@@ -1,0 +1,5 @@
+dynamodb_table      = "terraformLocks"
+s3_region           = "eu-west-1"
+s3_bucket_name      = "myco-terraform-state"
+env                 = "dev"
+terraform_user_arn  =""
