@@ -47,8 +47,7 @@ pipeline {
             steps {
                  sh  '''
                                              
-                      chmod +x ./provision-ci.sh   
-                        cd vpc/                               
+                                                   
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init -m vpc
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan -m vpc
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply -m vpc
