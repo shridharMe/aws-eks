@@ -95,7 +95,7 @@ pipeline {
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init -m eks-kube-config
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan -m  eks-kube-config
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply -m  eks-kube-config   
-                                                              
+
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r output -m  eks-kube-config
                         
                      '''
@@ -109,7 +109,8 @@ pipeline {
             }
             steps {
                  sh  '''     
-                        chmod +x ./provision-ci.sh                                               
+                        chmod +x ./provision-ci.sh   
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m eks-kube-config                                            
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m eks-worker-node
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m eks-cluster
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m vpc
