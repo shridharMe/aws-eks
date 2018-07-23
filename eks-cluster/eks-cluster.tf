@@ -30,7 +30,7 @@ output "cluster-security-id" {
 }
 
 output "cluster-name" {
-  value = "${var.cluster-name}"
+  value = "${module.eks-cluster.cluster-name}"
 }
 
 output "cluster-certificate-data" {
