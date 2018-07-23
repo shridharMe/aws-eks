@@ -41,9 +41,9 @@ output "internet_gateway" {
 
 
 output "public_subnets_cidr" {
-  value = "${var.public_subnets}"
+  value = "${join(",",var.public_subnets)}"
 }
 
 output "private_subnets_cidr" {
-  value = "${var.private_subnets}"
+  value = "${join(",",var.private_subnets)}"
 }
