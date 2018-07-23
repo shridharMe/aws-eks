@@ -38,3 +38,12 @@ output "public_route_tables" {
 output "internet_gateway" {
   value = "${module.vpc.internet_gateway}"
 }
+
+
+output "public_subnets_cidr" {
+  value = "${var.public_subnets}"
+}
+
+output "private_subnets_cidr" {
+  value = "${var.private_subnets}"
+}
