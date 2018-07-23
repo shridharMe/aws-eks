@@ -33,7 +33,59 @@ pipeline {
                     sh ''' 
                         chmod +x ./provision-ci.sh                                                        
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init -m prerequisite
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init -m vpc
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init -m eks-cluster
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init  -m eks-worker-node
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init  -m eks-kube-config
+                        
+
+                     '''
+            } 
+         stage('verify') {
+            when {
+                expression { params.REFRESH == false }
+                expression { params.TERRAFORM_ACTION == "provision" }
+            }
+            steps {            
+                    sh ''' 
+                        chmod +x ./provision-ci.sh                                                        
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r verify -m prerequisite
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r verify -m vpc
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r verify -m eks-cluster
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r verify  -m eks-worker-node
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r verify  -m eks-kube-config
+                        
+
+                     '''
+            }    
+         }  
+        stage('plan') {
+            when {
+                expression { params.REFRESH == false }
+                expression { params.TERRAFORM_ACTION == "provision" }
+            }
+            steps {            
+                    sh ''' 
+                        chmod +x ./provision-ci.sh                                                        
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan -m prerequisite
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan -m vpc
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan -m eks-cluster
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan  -m eks-worker-node
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan  -m eks-kube-config
+                        
+
+                     '''
+            }    
+         }   
+       stage('prerequisite') {
+            when {
+                expression { params.REFRESH == false }
+                expression { params.TERRAFORM_ACTION == "provision" }
+            }
+            
+            steps {            
+                    sh ''' 
+                        chmod +x ./provision-ci.sh                                                        
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply -m prerequisite
                      '''
             }
@@ -48,8 +100,7 @@ pipeline {
                  sh  '''
                                              
                                                    
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init -m vpc
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan -m vpc
+                        
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply -m vpc
                      '''
             }
@@ -64,8 +115,7 @@ pipeline {
                  sh  '''
                                              
                                                      
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init -m eks-cluster
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan -m eks-cluster
+                     
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply -m eks-cluster
                      '''
             }
@@ -78,8 +128,7 @@ pipeline {
             }
             steps {
                  sh  '''                                            
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init -m eks-worker-node
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan -m eks-worker-node
+                     
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply -m eks-worker-node
                      '''
             }
@@ -92,10 +141,8 @@ pipeline {
             }
             steps {
                  sh  ''' 
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init -m eks-kube-config
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan -m  eks-kube-config
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply -m  eks-kube-config   
 
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply -m  eks-kube-config   
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r output -m  eks-kube-config
                         
                      '''
@@ -113,8 +160,7 @@ pipeline {
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m eks-kube-config                                            
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m eks-worker-node
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m eks-cluster
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m vpc
-                          
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m vpc                          
                          aws s3 rm s3://myco-terraform-state --recursive
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m prerequisite
                      '''
