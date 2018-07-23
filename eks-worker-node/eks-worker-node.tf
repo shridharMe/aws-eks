@@ -20,8 +20,6 @@ data "terraform_remote_state" "eks-cluster" {
 module "eks-worker-node" {
  source                 = "git::https://github.com/shridharMe/terraform-modules.git//modules/eks-worker-node?ref=master"
  vpc_id                 = "${data.terraform_remote_state.vpc.vpc_id}"
- public_subnet_cidr      = "${join(",",data.terraform_remote_state.vpc.public_subnets_cidr)}"
- private_subnet         = "${join(",",data.terraform_remote_state.vpc.private_subnets)}"
  cluster-name           = "${data.terraform_remote_state.eks-cluster.cluster-name}"
  cluster-endpoint       = "${data.terraform_remote_state.eks-cluster.cluster-endpoint}"
  #cluster-security-id    = "${data.terraform_remote_state.eks-cluster.cluster-security-id}"
@@ -29,6 +27,8 @@ module "eks-worker-node" {
  desired-capacity       = "${var.desired-capacity}"
  max-size               = "${var.max-size}"
  min-size               = "${var.min-size}"
+  public_subnet_cidr    = "${join(",",data.terraform_remote_state.vpc.public_subnets_cidr)}"
+ private_subnet         = "${join(",",data.terraform_remote_state.vpc.private_subnets)}"
 }
 
 
