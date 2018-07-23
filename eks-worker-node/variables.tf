@@ -1,12 +1,17 @@
 variable "node-instance-type" {
-     description = "Intance Type"
+    default=""
 }
 variable "desired-capacity" {
-    description = "Capacity"
+   default=""
 }
 variable "max-size" {
-    description = "max size"
+    default=""
 }
 variable "min-size" {
-    description = "min size"
+    default=""
+}
+
+variable "cluster-name" {
+    default="dev-eks"
+
 }
