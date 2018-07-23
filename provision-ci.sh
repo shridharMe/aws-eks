@@ -26,7 +26,7 @@ elif [ "${squadname}" != "devops" ]; then
     printf "!!! invalid squad entry !!! \n"
     printf "valid squad values is  devops \n"
 
-elif [ "${runcmd}" != "init" ] && [  "${runcmd}" != "plan" ] && [  "${runcmd}" != "apply" ]  && [  "${runcmd}" != "destroy" && [  "${runcmd}" != "output" ]; then
+elif [ "${runcmd}" != "init" ] && [  "${runcmd}" != "plan" ] && [  "${runcmd}" != "apply" ]  && [  "${runcmd}" != "destroy" ] && [  "${runcmd}" != "output" ]; then
     printf "\n"
     printf "!!! invalid terrafrom command entry !!! \n"
     printf "Valid terrafrom command to run this script is:  init,plan,apply or destroy or output \n"  
