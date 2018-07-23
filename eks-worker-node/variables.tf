@@ -1,15 +1,12 @@
 variable "node-instance-type" {
-    description = "public subnet"
+     description = "Intance Type"
 }
 variable "desired-capacity" {
-    description = "public subnet"
+    description = "Capacity"
 }
 variable "max-size" {
-    description = "public subnet"
+    description = "max size"
 }
-variable "min-size" {}
-variable "cluster-name" {
-    description = "public subnet"
+variable "min-size" {
+    description = "min size"
 }
-
-
