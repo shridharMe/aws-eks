@@ -23,7 +23,7 @@ pipeline {
         
     }
     stages {
-        stage('prerequisite') {
+        stage('init') {
             when {
                 expression { params.REFRESH == false }
                 expression { params.TERRAFORM_ACTION == "provision" }
@@ -48,7 +48,7 @@ pipeline {
             }
             steps {            
                     sh ''' 
-                        chmod +x ./provision-ci.sh                                                        
+                                                                               
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r verify -m prerequisite
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r verify -m vpc
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r verify -m eks-cluster
@@ -66,7 +66,7 @@ pipeline {
             }
             steps {            
                     sh ''' 
-                        chmod +x ./provision-ci.sh                                                        
+                                                                            
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan -m prerequisite
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan -m vpc
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan -m eks-cluster
@@ -85,7 +85,7 @@ pipeline {
             
             steps {            
                     sh ''' 
-                        chmod +x ./provision-ci.sh                                                        
+                                                                              
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply -m prerequisite
                      '''
             }
