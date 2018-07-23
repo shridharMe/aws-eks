@@ -41,6 +41,7 @@ pipeline {
 
                      '''
             } 
+        }
          stage('verify') {
             when {
                 expression { params.REFRESH == false }
