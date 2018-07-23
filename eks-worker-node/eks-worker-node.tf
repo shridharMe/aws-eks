@@ -12,7 +12,7 @@ data "terraform_remote_state" "eks-cluster" {
   backend = "s3"
   config {
     bucket = "myco-terraform-state"
-    key    = "env:/dev-devops/eks-cluster/us-east-1.tfstate"
+    key    = "env:/dev-devops/eks/us-east-1.tfstate"
     region = "us-east-1"
   }
 }
