@@ -22,6 +22,7 @@ module "eks-worker-node" {
  vpc_id                 = "${data.terraform_remote_state.vpc.vpc_id}"
  cluster-name           = "${data.terraform_remote_state.eks-cluster.cluster-name}"
  cluster-endpoint       = "${data.terraform_remote_state.eks-cluster.cluster-endpoint}"
+ cluster-certificate-data = "${data.terraform_remote_state.eks-cluster.cluster-certificate-data}"
  #cluster-security-id    = "${data.terraform_remote_state.eks-cluster.cluster-security-id}"
  node-instance-type     = "${var.node-instance-type}"
  desired-capacity       = "${var.desired-capacity}"
