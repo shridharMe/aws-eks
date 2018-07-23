@@ -11,7 +11,5 @@ variable "min-size" {}
 variable "cluster-name" {
     description = "public subnet"
 }
-variable "cluster-endpoint" {
-    description = "public subnet"
-}
+
 
