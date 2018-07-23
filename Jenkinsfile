@@ -114,6 +114,8 @@ pipeline {
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m eks-worker-node
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m eks-cluster
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m vpc
+                          
+                         aws s3 rm s3://myco-terraform-state --recursive
                         ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m prerequisite
                      '''
             }

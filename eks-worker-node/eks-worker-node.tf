@@ -28,8 +28,8 @@ module "eks-worker-node" {
  desired-capacity       = "${var.desired-capacity}"
  max-size               = "${var.max-size}"
  min-size               = "${var.min-size}"
-  public_subnet_cidr    = "${join(",",data.terraform_remote_state.vpc.public_subnets_cidr)}"
- private_subnet         = "${join(",",data.terraform_remote_state.vpc.private_subnets)}"
+ public_subnet_cidr    = "${data.terraform_remote_state.vpc.public_subnets_cidr}"
+ private_subnet         = "${data.terraform_remote_state.vpc.private_subnets}"
 }
 
 
