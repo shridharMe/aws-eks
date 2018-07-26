@@ -37,9 +37,9 @@ else
        yes yes |  TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd}  
     
     elif [ ${runcmd} == "destroy" ];then 
-       TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}" -force
+       TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}" -var "max-size=${NO_OF_WORKER_NODE}" -force
      elif [ ${runcmd} == "apply" ];then 
-        TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}" -auto-approve  
+        TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}" -var "max-size=${NO_OF_WORKER_NODE}" -auto-approve  
     elif [ ${runcmd} == "output" ];then 
        if [ ${modulename} == "eks-cluster" ]; then
         TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} kubeconfig > ~/.kube/eks-cluster
@@ -49,7 +49,7 @@ else
         kubectl get nodes --watch
       fi
     else
-       TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}"
+       TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}" -var "max-size=${NO_OF_WORKER_NODE}"
     fi
     cd $WORKSPACE
 fi

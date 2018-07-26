@@ -19,8 +19,9 @@ pipeline {
         booleanParam(name: 'REFRESH',
             defaultValue: true,
             description: 'Refresh Jenkinsfile and exit.')  
-         choice(choices: 'provision\nteardown', description: 'Select option to create or teardown infro', name: 'TERRAFORM_ACTION')                          
-        
+            choice(choices: 'provision\nteardown', description: 'Select option to create or teardown infro', name: 'TERRAFORM_ACTION')
+            choice(choices: 'prerequiste\neks-all\neks-cluster\neks-worker-node\nvpc', description: 'Select aws resource\n Note: "eks-all" will create all resources at once', name: 'AWS_RESOURCE')                             
+            string(defaultValue: "1", description: 'Enter no of workernode required', name: 'NO_OF_WORKER_NODE')
     }
     stages {
         stage('init') {
@@ -32,13 +33,7 @@ pipeline {
             steps {            
                     sh ''' 
                         chmod +x ./provision-ci.sh                                                        
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init -m prerequisite
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init -m vpc
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init -m eks-cluster
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init  -m eks-worker-node
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init  -m eks-kube-config
-                        
-
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init -m $AWS_RESOURCE
                      '''
             } 
         }
@@ -50,12 +45,7 @@ pipeline {
             steps {            
                     sh ''' 
                                                                                
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r verify -m prerequisite
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r verify -m vpc
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r verify -m eks-cluster
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r verify  -m eks-worker-node
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r verify  -m eks-kube-config
-                        
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r verify -m $AWS_RESOURCE                        
 
                      '''
             }    
@@ -68,17 +58,12 @@ pipeline {
             steps {            
                     sh ''' 
                                                                             
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan -m prerequisite
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan -m vpc
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan -m eks-cluster
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan  -m eks-worker-node
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan  -m eks-kube-config
-                        
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan -m $AWS_RESOURCE                        
 
                      '''
             }    
          }   
-       stage('prerequisite') {
+       stage('apply') {
             when {
                 expression { params.REFRESH == false }
                 expression { params.TERRAFORM_ACTION == "provision" }
@@ -87,50 +72,7 @@ pipeline {
             steps {            
                     sh ''' 
                                                                               
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply -m prerequisite
-                     '''
-            }
-            
-        }
-        stage('vpc') {
-            when {
-                expression { params.REFRESH == false }  
-                expression { params.TERRAFORM_ACTION == "provision" }                         
-            }
-            steps {
-                 sh  '''
-                                             
-                                                   
-                        
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply -m vpc
-                     '''
-            }
-            
-        }
-        stage('eks-cluster') {
-            when {
-                expression { params.REFRESH == false }    
-                expression { params.TERRAFORM_ACTION == "provision" }                       
-            }
-            steps {
-                 sh  '''
-                                             
-                                                     
-                     
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply -m eks-cluster
-                     '''
-            }
-            
-        } 
-        stage('eks-worker-node') {
-            when {
-                expression { params.REFRESH == false } 
-                expression { params.TERRAFORM_ACTION == "provision" }                         
-            }
-            steps {
-                 sh  '''                                            
-                     
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply -m eks-worker-node
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply -m $AWS_RESOURCE
                      '''
             }
             
@@ -141,11 +83,8 @@ pipeline {
                 expression { params.TERRAFORM_ACTION == "provision" }                         
             }
             steps {
-                 sh  ''' 
-
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply -m  eks-kube-config   
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r output -m  eks-kube-config
-                        
+                 sh  '''
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r output -m  eks-kube-config                        
                      '''
             }
             
@@ -157,13 +96,13 @@ pipeline {
             }
             steps {
                  sh  '''     
-                        chmod +x ./provision-ci.sh   
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m eks-kube-config                                            
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m eks-worker-node
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m eks-cluster
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m vpc                          
-                         aws s3 rm s3://myco-terraform-state --recursive
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m prerequisite
+                        chmod +x ./provision-ci.sh  
+                        if [ "$AWS_RESOURCE" == "prerequisite" ]; then
+                         aws s3 rm s3://myco-terraform-state --recursive 
+                        fi
+                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m  $AWS_RESOURCE                                            
+                   
+                       
                      '''
             }
             
