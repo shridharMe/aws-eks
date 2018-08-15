@@ -48,8 +48,6 @@ variable "tags" {
   default     = {}
 }
 
- 
-
 variable "node-instance-type" {
   default = ""
 }
@@ -65,5 +63,3 @@ variable "max-size" {
 variable "min-size" {
   default = "1"
 }
-
- 
