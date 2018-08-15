@@ -1,6 +1,6 @@
 module "eks" {
   source             = "git::https://github.com/shridharMe/terraform-modules.git//modules/eks?ref=master"
-  cluster-name       = "${var.name}"
+  name                = "${var.name}"
   cidr               = "${var.cidr}"
   public_subnets     = "${var.public_subnets}"
   private_subnets    = "${var.private_subnets}"
@@ -8,6 +8,7 @@ module "eks" {
   owner              = "${var.owner}"
   environment        = "${var.environment}"
   terraform          = "${var.terraform}"
+  cluster-name       = "${var.name}"
   node-instance-type = "${var.node-instance-type}"
   desired-capacity   = "${var.desired-capacity}"
   max-size           = "${var.max-size}"
