@@ -1,4 +1,3 @@
-
 variable "name" {
   description = "The name of the VPC"
 }
@@ -7,13 +6,12 @@ variable "environment" {
   description = "The name of the environment"
 }
 
-
 variable "terraform" {
   description = "created by using terraform"
 }
 
 variable "owner" {
-  description = "The name of the VPC owner"  
+  description = "The name of the VPC owner"
 }
 
 variable "cidr" {
@@ -49,25 +47,27 @@ variable "tags" {
   description = "A map of tags to add to all resources"
   default     = {}
 }
+
 variable "cluster-name" {
-    description = "cluster name"
+  description = "cluster name"
 }
+
 variable "node-instance-type" {
-    default=""
+  default = ""
 }
+
 variable "desired-capacity" {
-   default=""
+  default = ""
 }
+
 variable "max-size" {
-    default=""
+  default = ""
 }
+
 variable "min-size" {
-    default=""
+  default = ""
 }
 
 variable "cluster-name" {
-    default="dev-eks"
-
+  default = "dev-eks"
 }
-
-

@@ -8,14 +8,12 @@ while getopts "r:s:e:m:" opt; do
       ;;
     e) envname="$OPTARG"
       ;;
-    m) modulename="$OPTARG"
-      ;;
     \?) echo "Invalid option -$OPTARG" >&2
        ;;
   esac
 done
 
-if [ -z ${runcmd} ] || [ -z ${squadname} ] || [ -z ${envname} ] || [ -z ${modulename} ] ; then
+if [ -z ${runcmd} ] || [ -z ${squadname} ] || [ -z ${envname} ]  ; then
     printf "\n"
     printf "Please provide squad and env and terraform command \n\n"
     printf "./provision.sh -s devops -e dev -r init -m vpc \n"
@@ -31,23 +29,27 @@ elif [ "${runcmd}" != "init" ] && [  "${runcmd}" != "plan" ] && [  "${runcmd}" !
     printf "!!! invalid terrafrom command entry !!! \n"
     printf "Valid terrafrom command to run this script is:  init,plan,apply or destroy or output \n"  
 else
-    cd ${modulename}/
+
     if [ ${runcmd} == "init" ];then
        rm -rf .terraform/
        yes yes |  TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd}  
     
-    elif [ ${runcmd} == "destroy" ];then 
+    elif [ ${runcmd} == "destroy_prereq" ];then
+          S3_BUCKET_NAME=TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} s3_bucket_name
+          aws s3 rm s3://${S3_BUCKET_NAME} --recursive 
        TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}" -var "max-size=${NO_OF_WORKER_NODE}" -force
+    elif [ ${runcmd} == "destroy_eks" ];then     
+       
+       TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}" -var "max-size=${NO_OF_WORKER_NODE}" -force
+
      elif [ ${runcmd} == "apply" ];then 
         TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}" -var "max-size=${NO_OF_WORKER_NODE}" -auto-approve  
-    elif [ ${runcmd} == "output" ];then 
-       if [ ${modulename} == "eks-cluster" ]; then
+    elif [ ${runcmd} == "output" ];then
         TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} kubeconfig > ~/.kube/eks-cluster
         export KUBECONFIG=~/.kube/eks-cluster
         TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} config-map > config-map-aws-auth.yaml
         kubectl apply -f config-map-aws-auth.yaml
-        kubectl get nodes --watch
-      fi
+        kubectl get nodes --watch    
     else
        TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}" -var "max-size=${NO_OF_WORKER_NODE}"
     fi

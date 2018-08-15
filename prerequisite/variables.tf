@@ -1,9 +1,11 @@
 variable "dynamodb_table" {
   description = ""
 }
+
 variable "s3_region" {
   description = ""
 }
+
 variable "s3_bucket_name" {
   description = ""
 }

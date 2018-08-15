@@ -20,62 +20,46 @@ pipeline {
             defaultValue: true,
             description: 'Refresh Jenkinsfile and exit.')  
             choice(choices: 'provision\nteardown', description: 'Select option to create or teardown infro', name: 'TERRAFORM_ACTION')
-            choice(choices: 'prerequiste\neks-all\neks-cluster\neks-worker-node\nvpc', description: 'Select aws resource\n Note: "eks-all" will create all resources at once', name: 'AWS_RESOURCE')                             
             string(defaultValue: "1", description: 'Enter no of workernode required', name: 'NO_OF_WORKER_NODE')
     }
     stages {
-        stage('init') {
+        stage ('prerequisite') {
             when {
                 expression { params.REFRESH == false }
                 expression { params.TERRAFORM_ACTION == "provision" }
             }
-            
-            steps {            
-                    sh ''' 
-                        chmod +x ./provision-ci.sh                                                        
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init -m $AWS_RESOURCE
-                     '''
-            } 
+            steps {
+                dir('prerequisite') {
+                  sh '''
+                      cp ../provision.sh .
+                    chmod +x ./provision.sh                     
+                    ./provision.sh -e int -r init
+                    ./provision.sh -e int -r validate
+                    ./provision.sh -e int -r plan
+                    ./provision.sh -e int -r apply
+                    '''
+
+                }}
         }
-         stage('verify') {
-            when {
-                expression { params.REFRESH == false }
-                expression { params.TERRAFORM_ACTION == "provision" }
-            }
-            steps {            
-                    sh ''' 
-                                                                               
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r verify -m $AWS_RESOURCE                        
 
-                     '''
-            }    
-         }  
-        stage('plan') {
-            when {
-                expression { params.REFRESH == false }
-                expression { params.TERRAFORM_ACTION == "provision" }
-            }
-            steps {            
-                    sh ''' 
-                                                                            
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan -m $AWS_RESOURCE                        
-
-                     '''
-            }    
-         }   
-       stage('apply') {
+        stage('eks') {
             when {
                 expression { params.REFRESH == false }
                 expression { params.TERRAFORM_ACTION == "provision" }
             }
             
-            steps {            
-                    sh ''' 
-                                                                              
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply -m $AWS_RESOURCE
-                     '''
-            }
-            
+            steps {  
+                 dir('eks') {          
+                    sh '''
+                      cp ../provision.sh .
+                    chmod +x ./provision.sh                     
+                    ./provision.sh -e int -r init
+                    ./provision.sh -e int -r validate
+                    ./provision.sh -e int -r plan
+                    ./provision.sh -e int -r apply
+                    '''
+                 }
+            } 
         } 
         stage('kubeconfig') {
             when {
@@ -84,26 +68,44 @@ pipeline {
             }
             steps {
                  sh  '''
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r output -m  eks-kube-config                        
+                        ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r output -m  eks-kube-config                        
                      '''
             }
             
         }
-        stage('teardown-complete') {
+        stage('teardown-prerequisite') {
             when {
                 expression { params.REFRESH == false } 
                 expression { params.TERRAFORM_ACTION == "teardown" }                         
             }
             steps {
+                dir('prerequisite') {
                  sh  '''     
-                        chmod +x ./provision-ci.sh  
-                        if [ "$AWS_RESOURCE" == "prerequisite" ]; then
-                         aws s3 rm s3://myco-terraform-state --recursive 
-                        fi
-                        ./provision-ci.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy -m  $AWS_RESOURCE                                            
+                        cp ../provision.sh .
+                        chmod +x ./provision.sh
+                        ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy_prereq                                          
                    
                        
                      '''
+            }
+            }
+            
+        } 
+        stage('teardown-eks') {
+            when {
+                expression { params.REFRESH == false } 
+                expression { params.TERRAFORM_ACTION == "teardown" }                         
+            }
+            steps {
+                dir('eks') {
+                 sh  '''     
+                        cp ../provision.sh .
+                        chmod +x ./provision.sh                      
+                        ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy_eks                                        
+                   
+                       
+                     '''
+            }
             }
             
         } 
