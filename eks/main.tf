@@ -63,41 +63,41 @@ module "kube-config" {
 
 */
 output "cluster-endpoint" {
-  value = "${module.eks-cluster.cluster-endpoint}"
+  value = "${module.eks.cluster-endpoint}"
 }
 
 output "cluster-security-id" {
-  value = "${module.eks-cluster.cluster-security-id}"
+  value = "${module.eks.cluster-security-id}"
 }
 
 output "cluster-name" {
-  value = "${module.eks-cluster.cluster-name}"
+  value = "${module.eks.cluster-name}"
 }
 
 output "cluster-certificate-data" {
-  value = "${module.eks-cluster.cluster-certificate-data}"
+  value = "${module.eks.cluster-certificate-data}"
 }
 
 output "cluster-arn" {
-  value = "${module.eks-cluster.cluster-arn}"
+  value = "${module.eks.cluster-arn}"
 }
 
 output "workstation-external-cidr" {
-  value = "${module.workstation-external.workstation-external-cidr}"
+  value = "${module.eks.workstation-external-cidr}"
 }
 
 output "node-security-id" {
-  value = "${module.eks-worker-node.node-security-id}"
+  value = "${module.eks.node-security-id}"
 }
 
 output "node-role-arn" {
-  value = "${module.eks-worker-node.node-role-arn}"
+  value = "${module.eks.node-role-arn}"
 }
 
 output "config-map-aws-auth" {
-  value = "${module.config-map-aws-auth}"
+  value = "${module.eks.config-map-aws-auth}"
 }
 
 output "kubeconfig" {
-  value = "${module.kubeconfig}"
+  value = "${module.eks.kubeconfig}"
 }
