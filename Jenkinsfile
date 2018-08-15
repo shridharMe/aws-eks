@@ -33,10 +33,10 @@ pipeline {
                   sh '''
                       cp ../provision.sh .
                     chmod +x ./provision.sh                     
-                    ./provision.sh -e int -r init
-                    ./provision.sh -e int -r validate
-                    ./provision.sh -e int -r plan
-                    #./provision.sh -e int -r apply
+                    ./provision.sh -s ${SQUAD_NAME} -e int -r init
+                    ./provision.sh -s ${SQUAD_NAME} -e int -r validate
+                    ./provision.sh -s ${SQUAD_NAME} -e int -r plan
+                    #./provision.sh -s ${SQUAD_NAME} -e int -r apply
                     '''
 
                 }}
