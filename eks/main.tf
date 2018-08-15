@@ -1,6 +1,6 @@
 module "eks" {
   source             = "git::https://github.com/shridharMe/terraform-modules.git//modules/eks?ref=master"
-  name               = "${var.name}"
+  cluster-name       = "${var.name}"
   cidr               = "${var.cidr}"
   public_subnets     = "${var.public_subnets}"
   private_subnets    = "${var.private_subnets}"
