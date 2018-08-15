@@ -69,7 +69,7 @@ pipeline {
             steps {
                  sh  '''
                         chmod +x ./provision.sh   
-                        ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r eks-kube-config                        
+                        ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r kubeconfig                        
                      '''
             }
             

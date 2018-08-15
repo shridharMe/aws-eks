@@ -24,7 +24,7 @@ elif [ "${squadname}" != "devops" ]; then
     printf "!!! invalid squad entry !!! \n"
     printf "valid squad values is  devops \n"
 
-elif [ "${runcmd}" != "init" ] && [  "${runcmd}" != "plan" ] && [  "${runcmd}" != "apply" ]  && [  "${runcmd}" != "destroy_prereq" ] && [  "${runcmd}" != "destroy_eks" ] && [  "${runcmd}" != "validate" ] && [  "${runcmd}" != "eks-kube-config" ]; then
+elif [ "${runcmd}" != "init" ] && [  "${runcmd}" != "plan" ] && [  "${runcmd}" != "apply" ]  && [  "${runcmd}" != "destroy_prereq" ] && [  "${runcmd}" != "destroy_eks" ] && [  "${runcmd}" != "validate" ] && [  "${runcmd}" != "kubeconfig" ]; then
     printf "\n"
     printf "!!! invalid terrafrom command entry !!! \n"
     printf "Valid terrafrom command to run this script is:  init,plan,apply or destroy or output \n"  
@@ -44,7 +44,7 @@ else
 
      elif [ ${runcmd} == "apply" ];then 
         TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}" -var "max-size=${NO_OF_WORKER_NODE}" -auto-approve  
-    elif [ ${runcmd} == "eks-kube-config" ];then
+    elif [ ${runcmd} == "kubeconfig" ];then
         mkdir -p ~/.kube     
         TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} kubeconfig > ~/.kube/eks-cluster
         export KUBECONFIG=~/.kube/eks-cluster
