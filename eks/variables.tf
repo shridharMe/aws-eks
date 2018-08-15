@@ -66,6 +66,4 @@ variable "min-size" {
   default = "1"
 }
 
-variable "cluster-name" {
-  default = "dev-eks"
-}
+ 

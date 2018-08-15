@@ -68,7 +68,8 @@ pipeline {
             }
             steps {
                  sh  '''
-                        ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r output -m  eks-kube-config                        
+                        chmod +x ./provision.sh   
+                        ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r eks-kube-config                        
                      '''
             }
             

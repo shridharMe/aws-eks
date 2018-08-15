@@ -44,7 +44,8 @@ else
 
      elif [ ${runcmd} == "apply" ];then 
         TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}" -var "max-size=${NO_OF_WORKER_NODE}" -auto-approve  
-    elif [ ${runcmd} == "output" ];then
+    elif [ ${runcmd} == "eks-kube-config" ];then
+        mkdir -p ~/.kube     
         TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} kubeconfig > ~/.kube/eks-cluster
         export KUBECONFIG=~/.kube/eks-cluster
         TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} config-map > config-map-aws-auth.yaml
