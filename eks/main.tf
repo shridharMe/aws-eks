@@ -10,8 +10,8 @@ module "eks" {
   terraform          = "${var.terraform}"
   node-instance-type = "${var.node-instance-type}"
   desired-capacity   = "${var.desired-capacity}"
-  max-size           = "${var.node-max-size}"
-  min-size           = "${var.node-min-size}"
+  max-size           = "${var.max-size}"
+  min-size           = "${var.min-size}"
 }
 
 /*

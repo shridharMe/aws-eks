@@ -48,24 +48,22 @@ variable "tags" {
   default     = {}
 }
 
-variable "cluster-name" {
-  description = "cluster name"
-}
+ 
 
 variable "node-instance-type" {
   default = ""
 }
 
 variable "desired-capacity" {
-  default = ""
+  default = "1"
 }
 
 variable "max-size" {
-  default = ""
+  default = "1"
 }
 
 variable "min-size" {
-  default = ""
+  default = "1"
 }
 
 variable "cluster-name" {
