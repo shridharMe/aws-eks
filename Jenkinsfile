@@ -36,7 +36,7 @@ pipeline {
                     ./provision.sh -e int -r init
                     ./provision.sh -e int -r validate
                     ./provision.sh -e int -r plan
-                    ./provision.sh -e int -r apply
+                    #./provision.sh -e int -r apply
                     '''
 
                 }}
@@ -56,7 +56,7 @@ pipeline {
                     ./provision.sh -e int -r init
                     ./provision.sh -e int -r validate
                     ./provision.sh -e int -r plan
-                    ./provision.sh -e int -r apply
+                    #./provision.sh -e int -r apply
                     '''
                  }
             } 
