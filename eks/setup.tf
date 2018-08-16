@@ -1,7 +1,7 @@
 # we expect that s3 bucket "roche-devops-terraform-dev" and dynodb table "terraformLocks" is created
 # with required policy
 
-/*terraform {
+terraform {
   required_version = "~> 0.11.3"
 
   backend "s3" {
@@ -11,7 +11,7 @@
     encrypt        = true
     dynamodb_table = "terraformLocks"
   }
-}*/
+}
 
 provider "aws" {
   region  = "us-east-1"
